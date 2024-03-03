@@ -1,0 +1,17 @@
+server:
+  port: 8090
+
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+api:
+  jph:
+    domain: "api.coingecko.com"
+    basepath: "/api/v3"
+    endpoints:
+      markets: "/coins/markets"
+      list: "/coins/list"
+    key: "CG-bwho9ocenw9LA9LoBbJQvGFa"
+    
