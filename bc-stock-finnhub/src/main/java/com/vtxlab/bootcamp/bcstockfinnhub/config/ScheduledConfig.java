@@ -39,7 +39,7 @@ public class ScheduledConfig {
       finnhubService.saveStockToRedis();
 
       this.finnhubUpdatedTime = LocalDateTime.now();
-      System.out.println("Redis update time=" + this.finnhubUpdatedTime);
+      System.out.println("Finnhub - Redis update time= " + this.finnhubUpdatedTime);
 
     } catch (RestClientException | JsonProcessingException  ex) {
 
