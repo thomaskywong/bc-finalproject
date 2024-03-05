@@ -40,7 +40,7 @@ public class ScheduledConfig {
 
       cryptoGeckoService.getDataToRedis();
       this.coingeckoUpdateTime = LocalDateTime.now();
-      System.out.println("Redis update time= " + this.coingeckoUpdateTime);
+      System.out.println("Coingecko - Redis update time= " + this.coingeckoUpdateTime);
 
     } catch (RestClientException | JsonProcessingException ex) {
 
