@@ -63,6 +63,10 @@ public class CrytoGeckoServiceImpl implements CryptoGeckoService {
                                         key);
                         Market[] markets = restTemplate.getForObject(urlString,
                                         Market[].class);
+
+                        // String markets = restTemplate.getForObject(urlString,String.class);
+                        // System.out.println(markets));
+
                         return Arrays.stream(markets)
                                         .collect(Collectors.toList());
                 } else {
@@ -108,6 +112,9 @@ public class CrytoGeckoServiceImpl implements CryptoGeckoService {
                                         Market[] markets = restTemplate
                                                         .getForObject(urlString,
                                                                         Market[].class);
+
+                                        // System.out.println(Arrays
+                                        //                 .toString(markets));
 
                                         return Arrays.stream(markets).collect(
                                                         Collectors.toList());

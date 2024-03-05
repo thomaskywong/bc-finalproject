@@ -2,6 +2,7 @@ package com.vxtlab.bootcamp.bccryptocoingecko.Controller.impl;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,28 @@ public class CryptoCoinGeckoController implements CryptoCoinGeckoOperation {
 
   @Autowired // ApiService
   private ApiService<CoinData> apiService;
+
+  
+  @Override
+  public ApiResponse<List<Market>> getMarkets20(String currency, String... ids)
+      throws Exception {
+
+    if (!(Currency.isValidCurrency(currency))) {
+      throw new InvalidCurrencyException(Syscode.INVALID_CURRENCY);
+    }
+
+    Currency cur = Currency.toCurrency(currency);
+
+    List<Market> markets = cryptoGeckoService.getMarkets(cur, ids);
+
+    List<Market> markets20 = markets.stream().limit(20).collect(Collectors.toList());
+
+    return ApiResponse.<List<Market>>builder() //
+        .ok() //
+        .data(markets20) //
+        .build();
+
+  }
 
   @Override
   public ApiResponse<List<Market>> getMarkets(String currency, String... ids)
