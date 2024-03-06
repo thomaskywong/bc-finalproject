@@ -1,7 +1,5 @@
 package com.vxtlab.bootcamp.bccryptocoingecko.Controller;
 
-
-
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -26,6 +24,14 @@ public interface CryptoCoinGeckoOperation {
             @RequestParam(name = "ids", required = false) String... ids) //
             throws Exception;
 
+    @GetMapping(value = "/coins/markets2")
+    @ResponseStatus(value = HttpStatus.OK)
+    @CrossOrigin // For ApiResponse unwrapping
+    ApiResponse<List<Market>> getMarkets2(
+            @RequestParam(name = "currency", required = true) String currency, //
+            @RequestParam(name = "ids", required = false) String... ids) //
+            throws Exception;
+
     @GetMapping(value = "/coins/list")
     @ResponseStatus(value = HttpStatus.OK)
     ApiResponse<List<Coin>> getCoins() throws JsonProcessingException;
@@ -35,7 +41,6 @@ public interface CryptoCoinGeckoOperation {
 
     @GetMapping(value = "/coins-data")
     String showCoins(Model model);
-
 
 
 

@@ -35,27 +35,6 @@ public class CryptoCoinGeckoController implements CryptoCoinGeckoOperation {
 
   
   @Override
-  public ApiResponse<List<Market>> getMarkets20(String currency, String... ids)
-      throws Exception {
-
-    if (!(Currency.isValidCurrency(currency))) {
-      throw new InvalidCurrencyException(Syscode.INVALID_CURRENCY);
-    }
-
-    Currency cur = Currency.toCurrency(currency);
-
-    List<Market> markets = cryptoGeckoService.getMarkets(cur, ids);
-
-    List<Market> markets20 = markets.stream().limit(20).collect(Collectors.toList());
-
-    return ApiResponse.<List<Market>>builder() //
-        .ok() //
-        .data(markets20) //
-        .build();
-
-  }
-
-  @Override
   public ApiResponse<List<Market>> getMarkets(String currency, String... ids)
       throws Exception {
 
@@ -66,6 +45,28 @@ public class CryptoCoinGeckoController implements CryptoCoinGeckoOperation {
     Currency cur = Currency.toCurrency(currency);
 
     List<Market> markets = cryptoGeckoService.getMarkets(cur, ids);
+
+    return ApiResponse.<List<Market>>builder() //
+        .ok() //
+        .data(markets) //
+        .build();
+
+  }
+
+  @Override
+  public ApiResponse<List<Market>> getMarkets2(String currency, String... ids)
+      throws Exception {
+
+    if (!(Currency.isValidCurrency(currency))) {
+      throw new InvalidCurrencyException(Syscode.INVALID_CURRENCY);
+    }
+
+    Currency cur = Currency.toCurrency(currency);
+
+    List<Market> markets = cryptoGeckoService.getMarkets(cur, ids)//
+                                             .stream()//
+                                             .filter(e -> e.getMarketCapRank() <= 10)//
+                                             .collect(Collectors.toList());
 
     return ApiResponse.<List<Market>>builder() //
         .ok() //
