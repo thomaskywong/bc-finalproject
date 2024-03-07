@@ -30,7 +30,8 @@ public class ScheduledConfig {
   @Autowired
   private ObjectMapper objectMapper;
 
-  @Scheduled(fixedRate = 60000)
+
+  @Scheduled(fixedRate = 30000)
   // @Scheduled(cron = "0 * * * * *") // every xx:xx:00
   public void fixedRateTask() {
 

@@ -7,9 +7,16 @@ import lombok.Getter;
 @Getter
 public enum CoinId {
 
-  BITCOIN ("bitcoin"),
-  ETHEREUM ("ethereum"),
-  TETHER ("tether"),
+  BITCOIN("bitcoin"), //
+  ETHEREUM("ethereum"), //
+  TETHER("tether"), //
+  BNB("binancecoin"), //
+  SOLANA("solana"),//
+  LIDO_STAKED_ETHER("staked-ether"),//
+  XRP("warioxrpdumbledoreyugioh69inu"),//
+  USDC("zksync-bridged-usdc-zksync"),//
+  CARDANO("ada-the-dog"),//
+  DOGECOIN("binance-peg-dogecoin"),//
   ;
 
   private String id;
@@ -19,7 +26,7 @@ public enum CoinId {
   }
 
   public static boolean isValidCoinId(String id) {
-    
+
     for (CoinId coin : CoinId.values()) {
       if (coin.getId().equals(id)) {
         return true;
@@ -28,5 +35,5 @@ public enum CoinId {
     return false;
   }
 
-  
+
 }
