@@ -23,7 +23,7 @@ public class ScheduledConfig {
   // @Scheduled(cron = "* * 0 * * *") // every xx:xx:00
   @Transactional
   void reflashCryptoDB() throws JsonProcessingException {
-    cryptoService.clearCoinsFromDB();
+    // cryptoService.clearCoinsFromDB();
     cryptoService.storeCoinsToDB();
 
   }
@@ -36,13 +36,13 @@ public class ScheduledConfig {
     cryptoService.storeCoinEntitiesToDB();
   }
 
-  @Scheduled(fixedRate = 30000)
+  @Scheduled(fixedRate = 60000)
   // @Scheduled(cron = "0 * * * * *") // every xx:xx:00
   @Transactional
   void reflashStocksDB() throws JsonProcessingException {
-    finnhubService.clearProfilesFromDB();
+    // finnhubService.clearProfilesFromDB();
     finnhubService.saveProfilesToDB();
-    finnhubService.clearQuotesFromDB();
+    // finnhubService.clearQuotesFromDB();
     finnhubService.saveQuotesToDB();
   }
 

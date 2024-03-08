@@ -61,14 +61,14 @@ public class GlobalExceptionHandler {
         .build();
   }
 
-  // @ExceptionHandler(Exception.class)
-  // @ResponseStatus(value = HttpStatus.REQUEST_TIMEOUT)
-  // public ApiResponse<Void> ExceptionHandler(Exception ex) {
-  //   return ApiResponse.<Void>builder() //
-  //       .status(Syscode.GENERAL_EXCEPTION) //
-  //       .data(null) //
-  //       .build();
-  // }
+  @ExceptionHandler(Exception.class)
+  @ResponseStatus(value = HttpStatus.REQUEST_TIMEOUT)
+  public ApiResponse<Void> ExceptionHandler(Exception ex) {
+    return ApiResponse.<Void>builder() //
+        .status(Syscode.GENERAL_EXCEPTION) //
+        .data(null) //
+        .build();
+  }
 
 
 }

@@ -237,17 +237,20 @@ public class FinnubServiceImpl implements FinnhubService {
 
     for (StockId id : stockIds) {
 
-      List<QuoteEntity> qEntityList =
-          stockQuoteRepository.findByQuoteStockCode(id.getStockId());
+      // List<QuoteEntity> qEntityList =
+      //     stockQuoteRepository.findByQuoteStockCode(id.getStockId());
 
-      List<ProfileEntity> pEntityList =
-          stockProfileRepository.findByQuoteStockCode(id.getStockId());
+      // List<ProfileEntity> pEntityList =
+      //     stockProfileRepository.findByQuoteStockCode(id.getStockId());
+      
+      ProfileEntity pEntity = stockProfileRepository.getMostRecentProfileEntityBySymbol(id.getStockId());
+      QuoteEntity qEntity = stockQuoteRepository.getMostRecentQuoteEntityBySymbol(id.getStockId());
 
       Profile2 profile;
       Quote quote;
       StockEntity stockEntity;
 
-      if (qEntityList.size() == 0 || pEntityList.size() == 0) {
+      if (pEntity == null || qEntity == null) {
 
         quote = this.getQuote(id);
         profile = this.getProfile(id);
@@ -255,10 +258,22 @@ public class FinnubServiceImpl implements FinnhubService {
 
       } else {
 
-        QuoteEntity qEntity = qEntityList.get(0);
-        ProfileEntity pEntity = pEntityList.get(0);
         stockEntity = stockMapper.mapStockEntity(pEntity, qEntity, id);
+
       }
+
+      // if (qEntityList.size() == 0 || pEntityList.size() == 0) {
+
+      //   quote = this.getQuote(id);
+      //   profile = this.getProfile(id);
+      //   stockEntity = stockMapper.mapStockEntity(profile, quote, id);
+
+      // } else {
+
+      //   QuoteEntity qEntity = qEntityList.get(0);
+      //   ProfileEntity pEntity = pEntityList.get(0);
+      //   stockEntity = stockMapper.mapStockEntity(pEntity, qEntity, id);
+      // }
 
       List<StockIdEntity> stockIdEntities =
           stockIdRepository.findByStockId(id.getStockId());
