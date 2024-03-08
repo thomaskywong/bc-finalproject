@@ -100,7 +100,7 @@
     
     <!-- table -->
     <table class="table-fixed cursor-pointer" >
-      <caption class="table-title font-bold text-gray-700  pb-2">Cryptocurrency Exchange (USD) (Top 5 Market Cap)</caption>
+      <caption class="table-title font-bold text-gray-700  pb-2">Cryptocurrency Exchange (USD) (Top 10 Market Cap)</caption>
       <!-- head -->
       <thead>
         <tr class="relative text-left text-gray-600 text-sm" >

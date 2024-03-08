@@ -65,7 +65,7 @@ public class CryptoCoinGeckoController implements CryptoCoinGeckoOperation {
 
     List<Market> markets = cryptoGeckoService.getMarkets(cur, ids)//
                                              .stream()//
-                                             .filter(e -> e.getMarketCapRank() <= 5)//
+                                             .filter(e -> e.getMarketCapRank() <= 10)//
                                              .collect(Collectors.toList());
 
     return ApiResponse.<List<Market>>builder() //

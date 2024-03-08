@@ -1,7 +1,9 @@
 package com.vtxlab.bootcamp.bcproductdata.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -9,7 +11,7 @@ import com.vtxlab.bootcamp.bcproductdata.entity.MarketEntity;
 
 public interface CryptoDBOperation {
 
-  @GetMapping(value = "/coins/markets/save")
+  @PostMapping(value = "/coins/markets/save")
   @ResponseStatus(value = HttpStatus.OK)
   Boolean storeCoinsToDB() throws JsonProcessingException;
 
@@ -18,11 +20,11 @@ public interface CryptoDBOperation {
   Boolean clearCoinsFromDB() throws JsonProcessingException;
 
   
-  @GetMapping(value = "/coins/entites/save")
+  @PostMapping(value = "/coins/entites/save")
   @ResponseStatus(value = HttpStatus.OK)
   Boolean storeCoinEntitiesToDB() throws JsonProcessingException;
 
-  @GetMapping(value = "/coins/entites/clear")
+  @DeleteMapping(value = "/coins/entites/clear")
   @ResponseStatus(value = HttpStatus.OK)
   Boolean clearCoinEntitiesFromDB() throws JsonProcessingException;
 

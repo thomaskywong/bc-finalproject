@@ -18,28 +18,28 @@ public class ScheduledConfig {
   @Autowired
   private FinnhubService finnhubService;
 
-  @Scheduled(fixedRate = 30000)
+  @Scheduled(fixedRate = 5000)
   // @Scheduled(cron = "* * 0 * * *") // every xx:xx:00
   void reflashCryptoFromDB() throws JsonProcessingException {
     cryptoService.clearCoinsFromDB();
     cryptoService.storeCoinsToDB();
   }
 
-  @Scheduled(fixedRate = 30000)
+  @Scheduled(fixedRate = 5000)
   // @Scheduled(cron = "0 * * * * *") // every xx:xx:00
   void reflashQuotesToDB() throws JsonProcessingException {
     finnhubService.clearQuotesFromDB();
     finnhubService.saveQuotesToDB();
   }
 
-  @Scheduled(fixedRate = 30000)
+  @Scheduled(fixedRate = 5000)
   // @Scheduled(cron = "0 * * * * *") // every xx:xx:00
   void reflashProfilesToDB() throws JsonProcessingException {
     finnhubService.clearProfilesFromDB();
     finnhubService.saveProfilesToDB();
   }
 
-  @Scheduled(fixedRate = 30000)
+  @Scheduled(fixedRate = 5000)
   // @Scheduled(cron = "0 * * * * *") // every xx:xx:00
   void reflashCoinsPricesToDB() throws JsonProcessingException {
     cryptoService.clearCoinEntitiesFromDB();
