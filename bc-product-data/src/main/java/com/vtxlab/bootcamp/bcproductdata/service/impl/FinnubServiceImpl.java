@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vtxlab.bootcamp.bcproductdata.dto.Profile2;
@@ -20,6 +22,8 @@ import com.vtxlab.bootcamp.bcproductdata.entity.QuoteEntity;
 import com.vtxlab.bootcamp.bcproductdata.entity.StockEntity;
 import com.vtxlab.bootcamp.bcproductdata.entity.StockIdEntity;
 import com.vtxlab.bootcamp.bcproductdata.exception.FinnhubNotAvailableException;
+import com.vtxlab.bootcamp.bcproductdata.exception.InvalidStockSymbolException;
+import com.vtxlab.bootcamp.bcproductdata.infra.ApiResponse;
 import com.vtxlab.bootcamp.bcproductdata.infra.Scheme;
 import com.vtxlab.bootcamp.bcproductdata.infra.Syscode;
 import com.vtxlab.bootcamp.bcproductdata.mapper.ProfileMapper;
@@ -37,6 +41,7 @@ import com.vtxlab.bootcamp.bcproductdata.repository.StockQuoteRepository;
 import com.vtxlab.bootcamp.bcproductdata.repository.StockRepository;
 import com.vtxlab.bootcamp.bcproductdata.service.FinnhubService;
 import com.vtxlab.bootcamp.bcproductdata.service.StockIdService;
+import jakarta.transaction.Transactional;
 
 @Service
 public class FinnubServiceImpl implements FinnhubService {
@@ -89,7 +94,9 @@ public class FinnubServiceImpl implements FinnhubService {
   private StockIdService stockIdService;
 
 
+
   @Override
+  @Transactional
   public Boolean saveProfilesToDB() throws JsonProcessingException {
 
     // System.out.println("Check1");
@@ -126,6 +133,7 @@ public class FinnubServiceImpl implements FinnhubService {
   }
 
   @Override
+  @Transactional
   public Boolean storeAAPLProfileToDB() throws JsonProcessingException {
 
     // Get profile
@@ -162,6 +170,7 @@ public class FinnubServiceImpl implements FinnhubService {
 
 
   @Override
+  @Transactional
   public Boolean saveQuotesToDB() throws JsonProcessingException {
 
     List<StockIdEntity> idEntities = stockIdRepository.findAll();
@@ -214,49 +223,120 @@ public class FinnubServiceImpl implements FinnhubService {
   }
 
   @Override
+  @Transactional
   public Boolean storeStockEntitiesToDB() throws JsonProcessingException {
+
 
     List<StockId> stockIds = stockIdService.getStockIds();
 
+    System.out.println(stockIds);
+
+
     List<StockEntity> stockEntities = new ArrayList<>();
+
 
     for (StockId id : stockIds) {
 
-      Profile2 profile = this.getProfile(id);
+      List<QuoteEntity> qEntityList =
+          stockQuoteRepository.findByQuoteStockCode(id.getStockId());
 
-      Quote quote = this.getQuote(id);
+      List<ProfileEntity> pEntityList =
+          stockProfileRepository.findByQuoteStockCode(id.getStockId());
 
-      StockEntity stockEntity = stockMapper.mapStockEntity(profile, quote, id);
+      Profile2 profile;
+      Quote quote;
+      StockEntity stockEntity;
 
-      
-      List<StockIdEntity> stockIdEntities = stockIdRepository.findByStockId(id.getStockId());
+      if (qEntityList.size() == 0 || pEntityList.size() == 0) {
+
+        quote = this.getQuote(id);
+        profile = this.getProfile(id);
+        stockEntity = stockMapper.mapStockEntity(profile, quote, id);
+
+      } else {
+
+        QuoteEntity qEntity = qEntityList.get(0);
+        ProfileEntity pEntity = pEntityList.get(0);
+        stockEntity = stockMapper.mapStockEntity(pEntity, qEntity, id);
+      }
+
+      List<StockIdEntity> stockIdEntities =
+          stockIdRepository.findByStockId(id.getStockId());
+
 
       StockIdEntity stockIdEntity = stockIdEntities.get(0);
 
-      stockIdEntity.setStockEntity(stockEntity);
+      // System.out.println(stockIdEntity);
 
+      stockIdEntity.setStockEntity(stockEntity);
 
       stockEntities.add(stockEntity);
     }
 
     // System.out.println(stockEntities);
 
-    stockRepository.deleteAll();
+    // stockRepository.deleteAll();
     stockRepository.saveAll(stockEntities);
 
     return true;
   }
 
-  
+
   @Override
   public Boolean clearStockEntitiesFromDB() throws JsonProcessingException {
+
+    List<StockId> stockIds = stockIdService.getStockIds();
+
+    for (StockId id : stockIds) {
+
+      List<StockIdEntity> stockIdEntities =
+          stockIdRepository.findByStockId(id.getStockId());
+      StockIdEntity stockIdEntity = stockIdEntities.get(0);
+
+      stockIdEntity.setStockEntity(null);
+
+    }
+
 
     stockRepository.deleteAll();
 
     return true;
-  
+
   }
 
+  @Override
+  public List<StockEntity> getStockMarketPrices() {
+    return stockRepository.findAll();
+  }
+
+
+  // @Override
+  // public ProfileEntity getStockProfileEntitiesFromDB(String symbol)
+  //     throws JsonProcessingException {
+
+  //   List<ProfileEntity> profileEntity =
+  //       stockProfileRepository.findByQuoteStockCode(symbol);
+
+  //   if (profileEntity.size() == 0) {
+  //     throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+  //   }
+
+  //   return profileEntity.get(0);
+  // }
+
+  // @Override
+  // public QuoteEntity getStockQuoteEntitiesFromDB(String symbol)
+  //     throws JsonProcessingException {
+
+  //   List<QuoteEntity> quoteEntity =
+  //       stockQuoteRepository.findByQuoteStockCode(symbol);
+
+  //   if (quoteEntity.size() == 0) {
+  //     throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+  //   }
+
+  //   return quoteEntity.get(0);
+  // }
 
   private Profile2 getProfile(StockId id) {
 
@@ -298,7 +378,6 @@ public class FinnubServiceImpl implements FinnhubService {
     }
 
     return apiRespQuote.getData();
-
 
   }
 

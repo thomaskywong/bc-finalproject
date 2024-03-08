@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vtxlab.bootcamp.bcproductdata.controller.StockDBOperation;
+import com.vtxlab.bootcamp.bcproductdata.entity.ProfileEntity;
+import com.vtxlab.bootcamp.bcproductdata.entity.QuoteEntity;
 import com.vtxlab.bootcamp.bcproductdata.service.FinnhubService;
 
 
@@ -55,5 +57,17 @@ public class StockDBController implements StockDBOperation{
     public Boolean clearStockEntitiesFromDB() throws JsonProcessingException {
       return finnhubService.clearStockEntitiesFromDB();
     }
+
+    // @Override
+    // public ProfileEntity getStockProfileEntitiesFromDB(String symbol)
+    //     throws JsonProcessingException {
+    //   return finnhubService.getStockProfileEntitiesFromDB(symbol);
+    // }
+
+    // @Override
+    // public QuoteEntity getStockQuoteEntitiesFromDB(String symbol)
+    //     throws JsonProcessingException {
+    //       return finnhubService.getStockQuoteEntitiesFromDB(symbol);
+    // }
 
 }

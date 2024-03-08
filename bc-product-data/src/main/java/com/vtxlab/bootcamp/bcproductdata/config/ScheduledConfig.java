@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vtxlab.bootcamp.bcproductdata.service.CryptoService;
 import com.vtxlab.bootcamp.bcproductdata.service.FinnhubService;
+import jakarta.transaction.Transactional;
 
 @Configuration
 @EnableScheduling
@@ -18,33 +19,41 @@ public class ScheduledConfig {
   @Autowired
   private FinnhubService finnhubService;
 
-  @Scheduled(fixedRate = 5000)
+  @Scheduled(fixedRate = 60000)
   // @Scheduled(cron = "* * 0 * * *") // every xx:xx:00
-  void reflashCryptoFromDB() throws JsonProcessingException {
+  @Transactional
+  void reflashCryptoDB() throws JsonProcessingException {
     cryptoService.clearCoinsFromDB();
     cryptoService.storeCoinsToDB();
+
   }
 
-  @Scheduled(fixedRate = 5000)
+  @Scheduled(fixedRate = 60000)
+  // @Scheduled(cron = "* * 0 * * *") // every xx:xx:00
+  @Transactional
+  void reflashCoinEntityDB() throws JsonProcessingException {
+    cryptoService.clearCoinEntitiesFromDB();
+    cryptoService.storeCoinEntitiesToDB();
+  }
+
+  @Scheduled(fixedRate = 30000)
   // @Scheduled(cron = "0 * * * * *") // every xx:xx:00
-  void reflashQuotesToDB() throws JsonProcessingException {
+  @Transactional
+  void reflashStocksDB() throws JsonProcessingException {
+    finnhubService.clearProfilesFromDB();
+    finnhubService.saveProfilesToDB();
     finnhubService.clearQuotesFromDB();
     finnhubService.saveQuotesToDB();
   }
 
-  @Scheduled(fixedRate = 5000)
+  @Scheduled(fixedRate = 30000)
   // @Scheduled(cron = "0 * * * * *") // every xx:xx:00
-  void reflashProfilesToDB() throws JsonProcessingException {
-    finnhubService.clearProfilesFromDB();
-    finnhubService.saveProfilesToDB();
+  @Transactional
+  void reflashStockEntityDB() throws JsonProcessingException {
+    finnhubService.clearStockEntitiesFromDB();
+    finnhubService.storeStockEntitiesToDB();
   }
 
-  @Scheduled(fixedRate = 5000)
-  // @Scheduled(cron = "0 * * * * *") // every xx:xx:00
-  void reflashCoinsPricesToDB() throws JsonProcessingException {
-    cryptoService.clearCoinEntitiesFromDB();
-    cryptoService.storeCoinEntitiesToDB();
-  }
 
 
 

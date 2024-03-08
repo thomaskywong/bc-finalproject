@@ -1,6 +1,10 @@
 package com.vtxlab.bootcamp.bcproductdata.service;
 
+import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.vtxlab.bootcamp.bcproductdata.entity.ProfileEntity;
+import com.vtxlab.bootcamp.bcproductdata.entity.QuoteEntity;
+import com.vtxlab.bootcamp.bcproductdata.entity.StockEntity;
 
 public interface FinnhubService {
 
@@ -19,5 +23,13 @@ public interface FinnhubService {
     Boolean storeStockEntitiesToDB() throws JsonProcessingException;
 
     Boolean clearStockEntitiesFromDB() throws JsonProcessingException;
+
+    List<StockEntity> getStockMarketPrices();
+
+    // ProfileEntity getStockProfileEntitiesFromDB(String symbol)
+    //         throws JsonProcessingException;
+
+    // QuoteEntity getStockQuoteEntitiesFromDB(String symbol)
+    //   throws JsonProcessingException;
 
 }

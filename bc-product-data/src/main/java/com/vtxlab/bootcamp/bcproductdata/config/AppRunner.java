@@ -26,6 +26,7 @@ public class AppRunner implements CommandLineRunner{
 
     finnhubService.clearProfilesFromDB();
     finnhubService.storeAAPLProfileToDB();
+
   }
   
 }
