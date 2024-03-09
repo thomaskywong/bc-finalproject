@@ -55,10 +55,11 @@ public class ScheduledConfig {
   }
 
   // @Scheduled(fixedRate = 60000)
-  @Scheduled(cron = "* * 21 * * *", zone = "America/New_York") // every xx:xx:00
-  @Transactional
+  @Scheduled(cron = "1 * 21 * * *", zone = "America/New_York") // every xx:xx:00
+  // @Transactional
   void reflashStockDailyEntityDB() throws JsonProcessingException {
-    finnhubService.reflashStockDailyEntityInDB();
+    // finnhubService.reflashStockDailyEntityInDB();
+    finnhubService.storeStockDailyEntityToDB();
   }
 
 

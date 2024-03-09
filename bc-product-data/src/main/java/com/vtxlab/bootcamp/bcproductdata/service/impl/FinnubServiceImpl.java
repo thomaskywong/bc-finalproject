@@ -215,6 +215,7 @@ public class FinnubServiceImpl implements FinnhubService {
   }
 
   @Override
+  @Transactional
   public Boolean storeAAPLQuoteToDB() throws JsonProcessingException {
 
     StockId id = StockId.builder()//
@@ -239,11 +240,7 @@ public class FinnubServiceImpl implements FinnhubService {
 
     List<StockId> stockIds = stockIdService.getStockIds();
 
-    // System.out.println(stockIds);
-
-
     List<StockEntity> stockEntities = new ArrayList<>();
-
 
     for (StockId id : stockIds) {
 
@@ -268,11 +265,18 @@ public class FinnubServiceImpl implements FinnhubService {
 
       }
 
-      List<StockIdEntity> stockIdEntities =
+      // List<StockIdEntity> stockIdEntities =
+      // stockIdRepository.findByStockId(id.getStockId());
+
+
+      // StockIdEntity stockIdEntity = stockIdEntities.get(0);
+
+      StockIdEntity stockIdEntity =
           stockIdRepository.findByStockId(id.getStockId());
 
-
-      StockIdEntity stockIdEntity = stockIdEntities.get(0);
+      if (stockIdEntity == null) {
+        throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+      }
 
       // System.out.println(stockIdEntity);
 
@@ -288,15 +292,23 @@ public class FinnubServiceImpl implements FinnhubService {
 
 
   @Override
+  @Transactional
   public Boolean clearStockEntitiesFromDB() throws JsonProcessingException {
 
     List<StockId> stockIds = stockIdService.getStockIds();
 
     for (StockId id : stockIds) {
 
-      List<StockIdEntity> stockIdEntities =
+      // List<StockIdEntity> stockIdEntities =
+      // stockIdRepository.findByStockId(id.getStockId());
+      // StockIdEntity stockIdEntity = stockIdEntities.get(0);
+
+      StockIdEntity stockIdEntity =
           stockIdRepository.findByStockId(id.getStockId());
-      StockIdEntity stockIdEntity = stockIdEntities.get(0);
+
+      if (stockIdEntity == null) {
+        throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+      }
 
       stockIdEntity.setStockEntity(null);
 
@@ -318,29 +330,30 @@ public class FinnubServiceImpl implements FinnhubService {
   @Transactional
   public Boolean storeStockDailyEntityToDB() throws JsonProcessingException {
 
+    // update quote in DB (call bc-stock-finnhub API)
     this.saveQuotesToDB();
 
+    // get list of symbols
     List<StockId> ids = stockIdService.getStockIds();
 
     for (StockId id : ids) {
 
-      StockDailyEntity sDailyEntity;
-
+      // get quote from repository
       QuoteEntity qEntity = stockQuoteRepository
           .getMostRecentQuoteEntityBySymbol(id.getStockId());
 
-      if (qEntity != null) {
-        sDailyEntity = stockDailyMapper.mapStockDailyEntity(qEntity, id);
-      } else {
-        Quote quote = this.getQuote(id);
-        sDailyEntity = stockDailyMapper.mapStockDailyEntity(quote, id);
-      }
+      // convert quote entity to stock daily entity
+      StockDailyEntity sDailyEntity =
+          stockDailyMapper.mapStockDailyEntity(qEntity, id);
 
       // System.out.println(sDailyEntity);
+      // Long primaryKey =
+      // stockIdRepository.findByStockId(id.getStockId()).get(0).getId();
 
       Long primaryKey =
-          stockIdRepository.findByStockId(id.getStockId()).get(0).getId();
+          stockIdRepository.findByStockId(id.getStockId()).getId();
 
+      // Store stock daily entity to repository
       StockIdEntity sIdEntity =
           entityManager.find(StockIdEntity.class, primaryKey);
 
@@ -364,8 +377,7 @@ public class FinnubServiceImpl implements FinnhubService {
 
   @Override
   @Transactional
-  public Boolean reflashStockDailyEntityInDB()
-      throws JsonProcessingException {
+  public Boolean reflashStockDailyEntityInDB() throws JsonProcessingException {
 
     this.saveQuotesToDB();
 
@@ -376,8 +388,11 @@ public class FinnubServiceImpl implements FinnhubService {
       QuoteEntity recentQuoteEntity = stockQuoteRepository
           .getMostRecentQuoteEntityBySymbol(id.getStockId());
 
+      // StockIdEntity stockIdEntity =
+      // stockIdRepository.findByStockId(id.getStockId()).get(0);
+
       StockIdEntity stockIdEntity =
-          stockIdRepository.findByStockId(id.getStockId()).get(0);
+          stockIdRepository.findByStockId(id.getStockId());
 
       LocalDate recentDate = recentQuoteEntity.getQuoteDate().toLocalDate();
 
@@ -421,40 +436,12 @@ public class FinnubServiceImpl implements FinnhubService {
 
         // Use EntityManager to merge into DB
         entityManager.merge(sIdEntity);
-
       }
 
     }
     return true;
   }
 
-  // @Override
-  // public ProfileEntity getStockProfileEntitiesFromDB(String symbol)
-  // throws JsonProcessingException {
-
-  // List<ProfileEntity> profileEntity =
-  // stockProfileRepository.findByQuoteStockCode(symbol);
-
-  // if (profileEntity.size() == 0) {
-  // throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
-  // }
-
-  // return profileEntity.get(0);
-  // }
-
-  // @Override
-  // public QuoteEntity getStockQuoteEntitiesFromDB(String symbol)
-  // throws JsonProcessingException {
-
-  // List<QuoteEntity> quoteEntity =
-  // stockQuoteRepository.findByQuoteStockCode(symbol);
-
-  // if (quoteEntity.size() == 0) {
-  // throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
-  // }
-
-  // return quoteEntity.get(0);
-  // }
 
   private Profile2 getProfile(StockId id) {
 

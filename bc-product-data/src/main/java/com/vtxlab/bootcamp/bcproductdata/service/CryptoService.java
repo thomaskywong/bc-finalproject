@@ -10,11 +10,13 @@ public interface CryptoService {
 
   Boolean clearCoinsFromDB() throws JsonProcessingException;
 
+
   Boolean storeBitcoinsToDB() throws JsonProcessingException;
 
   Boolean storeCoinEntitiesToDB() throws JsonProcessingException;
 
   Boolean clearCoinEntitiesFromDB() throws JsonProcessingException;
 
+  
   List<CoinEntity> getCoinMarketPrices() throws JsonProcessingException;
 }

@@ -22,14 +22,17 @@ public class StockMapper {
 
   public StockEntity mapStockEntity(Profile2 profile, Quote quote, StockId id) {
 
-    List<StockIdEntity> stockIdEntities =
+    // List<StockIdEntity> stockIdEntities =
+    // stockIdRepository.findByStockId(id.getStockId());
+
+    // if (stockIdEntities.size() == 0) {
+    // throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+    // }
+
+    // StockIdEntity stockIdEntity = stockIdEntities.get(0);
+
+    StockIdEntity stockIdEntity =
         stockIdRepository.findByStockId(id.getStockId());
-
-    if (stockIdEntities.size() == 0) {
-      throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
-    }
-
-    StockIdEntity stockIdEntity = stockIdEntities.get(0);
 
     StockEntity stockEntity = new StockEntity(null, //
         id.getStockId(), //
@@ -37,30 +40,38 @@ public class StockMapper {
         quote.getDp(), //
         profile.getMarketCapitalization(), //
         profile.getLogo(), //
-        stockIdEntity); 
+        stockIdEntity);
 
     return stockEntity;
 
   }
 
-  public StockEntity mapStockEntity(ProfileEntity pEntity, QuoteEntity qEntity, StockId id) {
+  public StockEntity mapStockEntity(ProfileEntity pEntity, QuoteEntity qEntity,
+      StockId id) {
 
-    List<StockIdEntity> stockIdEntities =
+    // List<StockIdEntity> stockIdEntities =
+    // stockIdRepository.findByStockId(id.getStockId());
+
+    // if (stockIdEntities.size() == 0) {
+    // throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+    // }
+
+    // StockIdEntity stockIdEntity = stockIdEntities.get(0);
+
+    StockIdEntity stockIdEntity =
         stockIdRepository.findByStockId(id.getStockId());
 
-    if (stockIdEntities.size() == 0) {
+    if (stockIdEntity == null) {
       throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
     }
 
-    StockIdEntity stockIdEntity = stockIdEntities.get(0);
-
     StockEntity stockEntity = new StockEntity(null, //
-                                  qEntity.getQuoteStockCode(),//
-                                  qEntity.getCurrPrice(),//
-                                  qEntity.getPriceChgPct(),//
-                                  pEntity.getMarketCapitalization(),//
-                                  pEntity.getLogo(),//
-                                  stockIdEntity);
+        qEntity.getQuoteStockCode(), //
+        qEntity.getCurrPrice(), //
+        qEntity.getPriceChgPct(), //
+        pEntity.getMarketCapitalization(), //
+        pEntity.getLogo(), //
+        stockIdEntity);
 
     return stockEntity;
 

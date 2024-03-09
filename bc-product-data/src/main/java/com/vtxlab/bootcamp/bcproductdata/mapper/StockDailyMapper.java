@@ -3,7 +3,6 @@ package com.vtxlab.bootcamp.bcproductdata.mapper;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.vtxlab.bootcamp.bcproductdata.dto.Quote;
@@ -24,14 +23,21 @@ public class StockDailyMapper {
 
   public StockDailyEntity mapStockDailyEntity(Quote quote, StockId id) {
 
-    List<StockIdEntity> stockIdEntities =
+    // List<StockIdEntity> stockIdEntities =
+    // stockIdRepository.findByStockId(id.getStockId());
+
+    // if (stockIdEntities.size() == 0) {
+    // throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+    // }
+
+    // StockIdEntity stockIdEntity = stockIdEntities.get(0);
+
+    StockIdEntity stockIdEntity =
         stockIdRepository.findByStockId(id.getStockId());
 
-    if (stockIdEntities.size() == 0) {
+    if (stockIdEntity == null) {
       throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
     }
-
-    StockIdEntity stockIdEntity = stockIdEntities.get(0);
 
     long timestamp = quote.getT();
     Instant instant = Instant.ofEpochSecond(timestamp);
@@ -50,16 +56,24 @@ public class StockDailyMapper {
   }
 
 
-  public StockDailyEntity mapStockDailyEntity(QuoteEntity quoteEntity, StockId id) {
+  public StockDailyEntity mapStockDailyEntity(QuoteEntity quoteEntity,
+      StockId id) {
 
-    List<StockIdEntity> stockIdEntities =
+    // List<StockIdEntity> stockIdEntities =
+    // stockIdRepository.findByStockId(id.getStockId());
+
+    // if (stockIdEntities.size() == 0) {
+    // throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+    // }
+
+    // StockIdEntity stockIdEntity = stockIdEntities.get(0);
+
+    StockIdEntity stockIdEntity =
         stockIdRepository.findByStockId(id.getStockId());
 
-    if (stockIdEntities.size() == 0) {
+    if (stockIdEntity == null) {
       throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
     }
-
-    StockIdEntity stockIdEntity = stockIdEntities.get(0);
 
     StockDailyEntity stockDailyEntity = new StockDailyEntity(null, //
         quoteEntity.getQuoteDate().toLocalDate(), //
@@ -72,7 +86,7 @@ public class StockDailyMapper {
     return stockDailyEntity;
 
   }
-  
-  
+
+
 
 }
