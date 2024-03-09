@@ -101,7 +101,6 @@ public class ProductController implements ProductOperation {
   public ApiResponse<List<StockDailyDTO>> getStockDaily(String symbol)
       throws JsonProcessingException {
 
-
     List<StockDailyEntity> stockDailyEntities =
         stockDailyService.getStockDaily(symbol);
 

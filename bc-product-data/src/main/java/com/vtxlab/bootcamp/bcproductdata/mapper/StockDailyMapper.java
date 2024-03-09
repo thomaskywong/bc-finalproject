@@ -20,17 +20,7 @@ public class StockDailyMapper {
   @Autowired
   private StockIdRepository stockIdRepository;
 
-
   public StockDailyEntity mapStockDailyEntity(Quote quote, StockId id) {
-
-    // List<StockIdEntity> stockIdEntities =
-    // stockIdRepository.findByStockId(id.getStockId());
-
-    // if (stockIdEntities.size() == 0) {
-    // throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
-    // }
-
-    // StockIdEntity stockIdEntity = stockIdEntities.get(0);
 
     StockIdEntity stockIdEntity =
         stockIdRepository.findByStockId(id.getStockId());
@@ -59,15 +49,6 @@ public class StockDailyMapper {
   public StockDailyEntity mapStockDailyEntity(QuoteEntity quoteEntity,
       StockId id) {
 
-    // List<StockIdEntity> stockIdEntities =
-    // stockIdRepository.findByStockId(id.getStockId());
-
-    // if (stockIdEntities.size() == 0) {
-    // throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
-    // }
-
-    // StockIdEntity stockIdEntity = stockIdEntities.get(0);
-
     StockIdEntity stockIdEntity =
         stockIdRepository.findByStockId(id.getStockId());
 
@@ -84,9 +65,5 @@ public class StockDailyMapper {
         stockIdEntity);
 
     return stockDailyEntity;
-
   }
-
-
-
 }

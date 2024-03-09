@@ -30,7 +30,6 @@ public interface ProductOperation {
   @CrossOrigin
   ApiResponse<List<Product>> getCoinMarketPrices() throws JsonProcessingException;
   
-
   @GetMapping(value = "/product/stocks/daily")
   @ResponseStatus(value = HttpStatus.OK)
   @CrossOrigin
