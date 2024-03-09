@@ -1,5 +1,6 @@
 package com.vtxlab.bootcamp.bcproductdata.config;
 
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -7,6 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vtxlab.bootcamp.bcproductdata.service.CryptoService;
 import com.vtxlab.bootcamp.bcproductdata.service.FinnhubService;
+import com.vtxlab.bootcamp.bcproductdata.service.StockDailyService;
 import jakarta.transaction.Transactional;
 
 @Configuration
@@ -18,6 +20,9 @@ public class ScheduledConfig {
 
   @Autowired
   private FinnhubService finnhubService;
+
+  @Autowired
+  private StockDailyService stockDailyService;
 
   // @Scheduled(fixedRate = 60000)
   @Scheduled(cron = "0 * * * * *") // every xx:xx:00
@@ -54,8 +59,16 @@ public class ScheduledConfig {
     finnhubService.storeStockEntitiesToDB();
   }
 
+  // @Scheduled(fixedRate = 10000)
+   @Scheduled(cron = "2 * 21 * * *", zone = "America/New_York") 
+  void saveStockDailyRadis() throws JsonProcessingException {
+    stockDailyService.saveDataToRedis();
+    System.out.println("Stock Daily - Redis update time= " + LocalDateTime.now());
+
+  }
+
   // @Scheduled(fixedRate = 60000)
-  @Scheduled(cron = "1 * 21 * * *", zone = "America/New_York") // every xx:xx:00
+  @Scheduled(cron = "1 * 21 * * *", zone = "America/New_York") 
   // @Transactional
   void reflashStockDailyEntityDB() throws JsonProcessingException {
     // finnhubService.reflashStockDailyEntityInDB();

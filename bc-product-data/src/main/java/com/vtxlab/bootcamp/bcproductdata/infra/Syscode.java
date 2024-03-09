@@ -12,7 +12,7 @@ public enum Syscode {
   INVALID_CURRENCY("200001","Invalid Currency."), //
   INVALID_COIN("200002","Invalid Coin Id."), //
   INVALID_STOCK_SYMBOL("200003","Invalid Stock Symbol."), //
-  REST_CLIENT_EXEPTION("900000", "RestClient Exception."), //
+  REST_CLIENT_EXEPTION("900000", "RestClientException - Product Data Service is unavailable."), //
   COINGECKO_NOT_AVAILABLE_EXCEPTION("900001","RestClientException - Coingecko Service is unavailable."), //
   FINNHUB_NOT_AVAILABLE_EXCEPTION("900000","RestClientException - Finnhub Service is unavailable."), //
   NPE_EXCEPTION("900009","Runtime Exception - NPE"), //

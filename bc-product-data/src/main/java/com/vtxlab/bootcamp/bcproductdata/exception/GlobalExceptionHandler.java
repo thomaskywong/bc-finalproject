@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(RestClientException.class)
-  @ResponseStatus(value = HttpStatus.REQUEST_TIMEOUT)
+  @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
   public ApiResponse<Void> RestClientExceptionHandler(RestClientException ex) {
     return ApiResponse.<Void>builder() //
         .status(Syscode.REST_CLIENT_EXEPTION) //
