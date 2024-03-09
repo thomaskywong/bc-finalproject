@@ -1,5 +1,6 @@
 package com.vtxlab.bootcamp.bcproductdata.controller.impl;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vtxlab.bootcamp.bcproductdata.controller.ProductOperation;
 import com.vtxlab.bootcamp.bcproductdata.dto.Product;
+import com.vtxlab.bootcamp.bcproductdata.dto.StockDailyDTO;
 import com.vtxlab.bootcamp.bcproductdata.entity.CoinEntity;
 import com.vtxlab.bootcamp.bcproductdata.entity.StockDailyEntity;
 import com.vtxlab.bootcamp.bcproductdata.entity.StockEntity;
@@ -96,9 +98,22 @@ public class ProductController implements ProductOperation {
   }
 
   @Override
-  public List<StockDailyEntity> getStockDaily(String symbol) throws JsonProcessingException {
+  public ApiResponse<List<StockDailyDTO>> getStockDaily(String symbol)
+      throws JsonProcessingException {
 
-    return stockDailyService.getStockDaily(symbol);
+
+    List<StockDailyEntity> stockDailyEntities =
+        stockDailyService.getStockDaily(symbol);
+
+    List<StockDailyDTO> stockDailyDTOs = stockDailyEntities.stream()//
+        .map(StockDailyDTO::mapToStockDailyDTO)//
+        .sorted(Comparator.comparing(StockDailyDTO::getTradeDate).reversed())//
+        .collect(Collectors.toList());
+
+    return ApiResponse.<List<StockDailyDTO>>builder()//
+        .ok()//
+        .data(stockDailyDTOs)//
+        .build();
 
   }
 

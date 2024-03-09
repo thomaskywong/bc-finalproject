@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vtxlab.bootcamp.bcproductdata.dto.Product;
+import com.vtxlab.bootcamp.bcproductdata.dto.StockDailyDTO;
 import com.vtxlab.bootcamp.bcproductdata.entity.StockDailyEntity;
 import com.vtxlab.bootcamp.bcproductdata.infra.ApiResponse;
 
@@ -33,7 +34,7 @@ public interface ProductOperation {
   @GetMapping(value = "/product/stocks/daily")
   @ResponseStatus(value = HttpStatus.OK)
   @CrossOrigin
-  List<StockDailyEntity> getStockDaily(@RequestParam String symbol) throws JsonProcessingException;
+  ApiResponse<List<StockDailyDTO>> getStockDaily(@RequestParam String symbol) throws JsonProcessingException;
 
 
 }
