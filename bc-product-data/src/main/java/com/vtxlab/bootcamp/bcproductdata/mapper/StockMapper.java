@@ -1,6 +1,5 @@
 package com.vtxlab.bootcamp.bcproductdata.mapper;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.vtxlab.bootcamp.bcproductdata.dto.Profile2;
@@ -22,15 +21,6 @@ public class StockMapper {
 
   public StockEntity mapStockEntity(Profile2 profile, Quote quote, StockId id) {
 
-    // List<StockIdEntity> stockIdEntities =
-    // stockIdRepository.findByStockId(id.getStockId());
-
-    // if (stockIdEntities.size() == 0) {
-    // throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
-    // }
-
-    // StockIdEntity stockIdEntity = stockIdEntities.get(0);
-
     StockIdEntity stockIdEntity =
         stockIdRepository.findByStockId(id.getStockId());
 
@@ -48,15 +38,6 @@ public class StockMapper {
 
   public StockEntity mapStockEntity(ProfileEntity pEntity, QuoteEntity qEntity,
       StockId id) {
-
-    // List<StockIdEntity> stockIdEntities =
-    // stockIdRepository.findByStockId(id.getStockId());
-
-    // if (stockIdEntities.size() == 0) {
-    // throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
-    // }
-
-    // StockIdEntity stockIdEntity = stockIdEntities.get(0);
 
     StockIdEntity stockIdEntity =
         stockIdRepository.findByStockId(id.getStockId());

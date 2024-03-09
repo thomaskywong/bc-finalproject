@@ -26,29 +26,4 @@ public class StockIdMapper {
     return stockIdEntity;
   }
 
-  // public StockIdEntity mapSymbolIdEntity(StockId id, StockEntity stockEntity) {
-  //   StockIdEntity stockIdEntity = new StockIdEntity();
-  //   stockIdEntity.setStockId(id.getStockId());
-  //   stockIdEntity.setStockEntity(stockEntity);
-  //   return stockIdEntity;
-  // }
-
-  // public StockIdEntity mapSymbolIdEntity(StockId id,
-  //     List<StockDailyEntity> stockDailyEntities) {
-  //   StockIdEntity stockIdEntity = new StockIdEntity();
-  //   stockIdEntity.setStockId(id.getStockId());
-  //   stockIdEntity.setStockDailyEntities(stockDailyEntities);
-  //   return stockIdEntity;
-  // }
-
-  // public StockIdEntity mapSymbolIdEntity(StockId id, StockEntity stockEntity,
-  //     List<StockDailyEntity> stockDailyEntities) {
-  //   StockIdEntity stockIdEntity = new StockIdEntity();
-  //   stockIdEntity.setStockId(id.getStockId());
-  //   stockIdEntity.setStockEntity(stockEntity);
-  //   stockIdEntity.setStockDailyEntities(stockDailyEntities);
-  //   return stockIdEntity;
-  // }
-
-
 }
