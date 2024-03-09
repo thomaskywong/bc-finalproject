@@ -1,6 +1,7 @@
 package com.vtxlab.bootcamp.bcproductdata.service.impl;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,12 +101,12 @@ public class StockDailyServiceImpl implements StockDailyService {
 
       List<StockDailyDTO> stockDailyDTOs = stockDailyEntities.stream()//
           .map(StockDailyDTO::mapToStockDailyDTO)//
+          .sorted(Comparator.comparing(StockDailyDTO::getTradeDate).reversed())
           .collect(Collectors.toList());
 
       String value = objectMapper.writeValueAsString(stockDailyDTOs);
 
       // System.out.println("value = " + value);
-
 
       redisService.setValue(keyString, value);
 

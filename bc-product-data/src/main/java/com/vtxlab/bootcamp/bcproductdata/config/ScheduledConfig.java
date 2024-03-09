@@ -59,16 +59,22 @@ public class ScheduledConfig {
     finnhubService.storeStockEntitiesToDB();
   }
 
-  // @Scheduled(fixedRate = 10000)
-   @Scheduled(cron = "2 * 21 * * *", zone = "America/New_York") 
-  void saveStockDailyRadis() throws JsonProcessingException {
-    stockDailyService.saveDataToRedis();
-    System.out.println("Stock Daily - Redis update time= " + LocalDateTime.now());
+  @Scheduled(fixedRate = 10000)
+  // @Scheduled(cron = "1 * 21 * * *", zone = "America/New_York")
+  void saveStockDailyRadis() {
 
+    try {
+      stockDailyService.saveDataToRedis();
+      System.out
+          .println("Stock Daily - Redis update time= " + LocalDateTime.now());
+    } catch (Exception ex) {
+
+    }
+    
   }
 
   // @Scheduled(fixedRate = 60000)
-  @Scheduled(cron = "1 * 21 * * *", zone = "America/New_York") 
+  @Scheduled(cron = "1 * 21 * * *", zone = "America/New_York")
   // @Transactional
   void reflashStockDailyEntityDB() throws JsonProcessingException {
     // finnhubService.reflashStockDailyEntityInDB();

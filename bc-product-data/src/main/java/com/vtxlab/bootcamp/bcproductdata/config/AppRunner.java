@@ -21,16 +21,16 @@ public class AppRunner implements CommandLineRunner{
   public void run(String... args) throws Exception {
 
     cryptoService.clearCoinsFromDB();
-    cryptoService.storeCoinsToDB();
-    // cryptoService.storeBitcoinsToDB();
+    // cryptoService.storeCoinsToDB();
+    cryptoService.storeBitcoinsToDB();
 
     finnhubService.clearQuotesFromDB();
-    finnhubService.saveQuotesToDB();
-    // finnhubService.storeAAPLQuoteToDB();
+    // finnhubService.saveQuotesToDB();
+    finnhubService.storeAAPLQuoteToDB();
 
     finnhubService.clearProfilesFromDB();
-    finnhubService.saveProfilesToDB();
-    // finnhubService.storeAAPLProfileToDB();
+    // finnhubService.saveProfilesToDB();
+    finnhubService.storeAAPLProfileToDB();
 
   }
   
