@@ -37,7 +37,6 @@ public class ScheduledConfig {
   public void fixedRateTask() {
 
     try {
-
       cryptoGeckoService.getDataToRedis();
       this.coingeckoUpdateTime = LocalDateTime.now();
       System.out.println("Coingecko - Redis update time= " + this.coingeckoUpdateTime);

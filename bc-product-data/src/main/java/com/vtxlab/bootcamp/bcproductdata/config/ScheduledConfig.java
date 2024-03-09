@@ -19,8 +19,8 @@ public class ScheduledConfig {
   @Autowired
   private FinnhubService finnhubService;
 
-  @Scheduled(fixedRate = 60000)
-  // @Scheduled(cron = "* * 0 * * *") // every xx:xx:00
+  // @Scheduled(fixedRate = 60000)
+  @Scheduled(cron = "0 * * * * *") // every xx:xx:00
   @Transactional
   void reflashCryptoDB() throws JsonProcessingException {
     // cryptoService.clearCoinsFromDB();
@@ -28,16 +28,16 @@ public class ScheduledConfig {
 
   }
 
-  @Scheduled(fixedRate = 60000)
-  // @Scheduled(cron = "* * 0 * * *") // every xx:xx:00
+  // @Scheduled(fixedRate = 60000)
+  @Scheduled(cron = "0 * * * * *") // every xx:xx:00
   @Transactional
   void reflashCoinEntityDB() throws JsonProcessingException {
     cryptoService.clearCoinEntitiesFromDB();
     cryptoService.storeCoinEntitiesToDB();
   }
 
-  @Scheduled(fixedRate = 60000)
-  // @Scheduled(cron = "0 * * * * *") // every xx:xx:00
+  // @Scheduled(fixedRate = 60000)
+  @Scheduled(cron = "0 * * * * *") // every xx:xx:00
   @Transactional
   void reflashStocksDB() throws JsonProcessingException {
     // finnhubService.clearProfilesFromDB();
@@ -46,15 +46,20 @@ public class ScheduledConfig {
     finnhubService.saveQuotesToDB();
   }
 
-  @Scheduled(fixedRate = 60000)
-  // @Scheduled(cron = "0 * * * * *") // every xx:xx:00
+  // @Scheduled(fixedRate = 60000)
+  @Scheduled(cron = "0 * * * * *") // every xx:xx:00
   @Transactional
   void reflashStockEntityDB() throws JsonProcessingException {
     finnhubService.clearStockEntitiesFromDB();
     finnhubService.storeStockEntitiesToDB();
   }
 
-  
+  // @Scheduled(fixedRate = 60000)
+  @Scheduled(cron = "* * 21 * * *", zone = "America/New_York") // every xx:xx:00
+  @Transactional
+  void reflashStockDailyEntityDB() throws JsonProcessingException {
+    finnhubService.reflashStockDailyEntityInDB();
+  }
 
 
 

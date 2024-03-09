@@ -4,11 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.vtxlab.bootcamp.bcproductdata.entity.ProfileEntity;
-import com.vtxlab.bootcamp.bcproductdata.entity.QuoteEntity;
 
 public interface StockDBOperation {
 
@@ -50,7 +47,7 @@ public interface StockDBOperation {
 
   @PostMapping(value = "/stock/daily/reflash")
   @ResponseStatus(value = HttpStatus.OK)
-  Boolean reflashSameDayStockDailyEntityInDB() throws JsonProcessingException;
+  Boolean reflashStockDailyEntityInDB() throws JsonProcessingException;
 
   // @GetMapping(value = "/profile/entity")
   // @ResponseStatus(value = HttpStatus.OK)

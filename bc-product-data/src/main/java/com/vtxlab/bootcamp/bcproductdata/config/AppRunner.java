@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import com.vtxlab.bootcamp.bcproductdata.service.CryptoService;
 import com.vtxlab.bootcamp.bcproductdata.service.FinnhubService;
+import jakarta.transaction.Transactional;
 
 @Component
 public class AppRunner implements CommandLineRunner{
@@ -16,16 +17,20 @@ public class AppRunner implements CommandLineRunner{
   private FinnhubService finnhubService;
 
   @Override
+  @Transactional
   public void run(String... args) throws Exception {
 
     cryptoService.clearCoinsFromDB();
-    cryptoService.storeBitcoinsToDB();
+    cryptoService.storeCoinsToDB();
+    // cryptoService.storeBitcoinsToDB();
 
     finnhubService.clearQuotesFromDB();
-    finnhubService.storeAAPLQuoteToDB();
+    finnhubService.saveQuotesToDB();
+    // finnhubService.storeAAPLQuoteToDB();
 
     finnhubService.clearProfilesFromDB();
-    finnhubService.storeAAPLProfileToDB();
+    finnhubService.saveProfilesToDB();
+    // finnhubService.storeAAPLProfileToDB();
 
   }
   

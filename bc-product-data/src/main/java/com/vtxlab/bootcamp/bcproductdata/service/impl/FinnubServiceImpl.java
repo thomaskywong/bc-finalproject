@@ -318,6 +318,8 @@ public class FinnubServiceImpl implements FinnhubService {
   @Transactional
   public Boolean storeStockDailyEntityToDB() throws JsonProcessingException {
 
+    this.saveQuotesToDB();
+
     List<StockId> ids = stockIdService.getStockIds();
 
     for (StockId id : ids) {
@@ -357,14 +359,15 @@ public class FinnubServiceImpl implements FinnhubService {
 
     }
 
-
     return true;
   }
 
   @Override
   @Transactional
-  public Boolean reflashSameDayStockDailyEntityInDB()
+  public Boolean reflashStockDailyEntityInDB()
       throws JsonProcessingException {
+
+    this.saveQuotesToDB();
 
     List<StockId> ids = stockIdService.getStockIds();
 
@@ -397,10 +400,6 @@ public class FinnubServiceImpl implements FinnhubService {
 
       } else {
 
-        // get most recent quoteEntity from DB
-        QuoteEntity qEntity = stockQuoteRepository
-            .getMostRecentQuoteEntityBySymbol(id.getStockId());
-
         // build StockDailyEntity
         StockDailyEntity sDailyEntity =
             stockDailyMapper.mapStockDailyEntity(recentQuoteEntity, id);
@@ -426,8 +425,6 @@ public class FinnubServiceImpl implements FinnhubService {
       }
 
     }
-
-
     return true;
   }
 

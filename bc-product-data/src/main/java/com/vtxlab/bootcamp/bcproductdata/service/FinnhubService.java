@@ -24,7 +24,7 @@ public interface FinnhubService {
 
     Boolean storeStockDailyEntityToDB() throws JsonProcessingException;
 
-    Boolean reflashSameDayStockDailyEntityInDB() throws JsonProcessingException; 
+    Boolean reflashStockDailyEntityInDB() throws JsonProcessingException; 
 
     List<StockEntity> getStockMarketPrices();
 
