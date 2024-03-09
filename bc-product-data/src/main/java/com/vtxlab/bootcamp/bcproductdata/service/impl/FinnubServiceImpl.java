@@ -7,27 +7,26 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vtxlab.bootcamp.bcproductdata.dto.Profile2;
 import com.vtxlab.bootcamp.bcproductdata.dto.Quote;
 import com.vtxlab.bootcamp.bcproductdata.entity.ProfileEntity;
 import com.vtxlab.bootcamp.bcproductdata.entity.QuoteEntity;
+import com.vtxlab.bootcamp.bcproductdata.entity.StockDailyEntity;
 import com.vtxlab.bootcamp.bcproductdata.entity.StockEntity;
 import com.vtxlab.bootcamp.bcproductdata.entity.StockIdEntity;
 import com.vtxlab.bootcamp.bcproductdata.exception.FinnhubNotAvailableException;
 import com.vtxlab.bootcamp.bcproductdata.exception.InvalidStockSymbolException;
-import com.vtxlab.bootcamp.bcproductdata.infra.ApiResponse;
 import com.vtxlab.bootcamp.bcproductdata.infra.Scheme;
 import com.vtxlab.bootcamp.bcproductdata.infra.Syscode;
 import com.vtxlab.bootcamp.bcproductdata.mapper.ProfileMapper;
 import com.vtxlab.bootcamp.bcproductdata.mapper.QuoteMapper;
+import com.vtxlab.bootcamp.bcproductdata.mapper.StockDailyMapper;
 import com.vtxlab.bootcamp.bcproductdata.mapper.StockIdMapper;
 import com.vtxlab.bootcamp.bcproductdata.mapper.StockMapper;
 import com.vtxlab.bootcamp.bcproductdata.mapper.UriCompBuilder;
@@ -41,6 +40,8 @@ import com.vtxlab.bootcamp.bcproductdata.repository.StockQuoteRepository;
 import com.vtxlab.bootcamp.bcproductdata.repository.StockRepository;
 import com.vtxlab.bootcamp.bcproductdata.service.FinnhubService;
 import com.vtxlab.bootcamp.bcproductdata.service.StockIdService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -62,6 +63,9 @@ public class FinnubServiceImpl implements FinnhubService {
 
   @Value(value = "${api.internal.stock.endpoints.symbols}")
   private String symbolEndpoint;
+
+  @Autowired
+  private StockIdService stockIdService;
 
   @Autowired
   private RestTemplate restTemplate;
@@ -91,8 +95,10 @@ public class FinnubServiceImpl implements FinnhubService {
   private StockMapper stockMapper;
 
   @Autowired
-  private StockIdService stockIdService;
+  private StockDailyMapper stockDailyMapper;
 
+  @PersistenceContext
+  private EntityManager entityManager;
 
 
   @Override
@@ -168,7 +174,6 @@ public class FinnubServiceImpl implements FinnhubService {
     return true;
   }
 
-
   @Override
   @Transactional
   public Boolean saveQuotesToDB() throws JsonProcessingException {
@@ -229,7 +234,7 @@ public class FinnubServiceImpl implements FinnhubService {
 
     List<StockId> stockIds = stockIdService.getStockIds();
 
-    System.out.println(stockIds);
+    // System.out.println(stockIds);
 
 
     List<StockEntity> stockEntities = new ArrayList<>();
@@ -237,14 +242,10 @@ public class FinnubServiceImpl implements FinnhubService {
 
     for (StockId id : stockIds) {
 
-      // List<QuoteEntity> qEntityList =
-      //     stockQuoteRepository.findByQuoteStockCode(id.getStockId());
-
-      // List<ProfileEntity> pEntityList =
-      //     stockProfileRepository.findByQuoteStockCode(id.getStockId());
-      
-      ProfileEntity pEntity = stockProfileRepository.getMostRecentProfileEntityBySymbol(id.getStockId());
-      QuoteEntity qEntity = stockQuoteRepository.getMostRecentQuoteEntityBySymbol(id.getStockId());
+      ProfileEntity pEntity = stockProfileRepository
+          .getMostRecentProfileEntityBySymbol(id.getStockId());
+      QuoteEntity qEntity = stockQuoteRepository
+          .getMostRecentQuoteEntityBySymbol(id.getStockId());
 
       Profile2 profile;
       Quote quote;
@@ -262,19 +263,6 @@ public class FinnubServiceImpl implements FinnhubService {
 
       }
 
-      // if (qEntityList.size() == 0 || pEntityList.size() == 0) {
-
-      //   quote = this.getQuote(id);
-      //   profile = this.getProfile(id);
-      //   stockEntity = stockMapper.mapStockEntity(profile, quote, id);
-
-      // } else {
-
-      //   QuoteEntity qEntity = qEntityList.get(0);
-      //   ProfileEntity pEntity = pEntityList.get(0);
-      //   stockEntity = stockMapper.mapStockEntity(pEntity, qEntity, id);
-      // }
-
       List<StockIdEntity> stockIdEntities =
           stockIdRepository.findByStockId(id.getStockId());
 
@@ -288,9 +276,6 @@ public class FinnubServiceImpl implements FinnhubService {
       stockEntities.add(stockEntity);
     }
 
-    // System.out.println(stockEntities);
-
-    // stockRepository.deleteAll();
     stockRepository.saveAll(stockEntities);
 
     return true;
@@ -324,33 +309,78 @@ public class FinnubServiceImpl implements FinnhubService {
     return stockRepository.findAll();
   }
 
+  @Override
+  @Transactional
+  public Boolean storeStockDailyEntityToDB() throws JsonProcessingException {
 
+    List<StockId> ids = stockIdService.getStockIds();
+
+    for (StockId id : ids) {
+
+      StockDailyEntity sDailyEntity;
+
+      QuoteEntity qEntity = stockQuoteRepository
+          .getMostRecentQuoteEntityBySymbol(id.getStockId());
+
+      if (qEntity != null) {
+        sDailyEntity = stockDailyMapper.mapStockDailyEntity(qEntity, id);
+      } else {
+        Quote quote = this.getQuote(id);
+        sDailyEntity = stockDailyMapper.mapStockDailyEntity(quote, id);
+      }
+
+      // System.out.println(sDailyEntity);
+
+      Long primaryKey =
+          stockIdRepository.findByStockId(id.getStockId()).get(0).getId();
+
+      StockIdEntity sIdEntity =
+          entityManager.find(StockIdEntity.class, primaryKey);
+
+      // System.out.println("StockIdEntities = " + sIdEntities);
+
+      if (sIdEntity == null) {
+        throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+      }
+
+      List<StockDailyEntity> stockDailyEntities =
+          sIdEntity.getStockDailyEntities();
+      stockDailyEntities.add(sDailyEntity);
+      sIdEntity.setStockDailyEntities(stockDailyEntities);
+
+      entityManager.merge(sIdEntity);
+
+    }
+
+
+    return true;
+  }
   // @Override
   // public ProfileEntity getStockProfileEntitiesFromDB(String symbol)
-  //     throws JsonProcessingException {
+  // throws JsonProcessingException {
 
-  //   List<ProfileEntity> profileEntity =
-  //       stockProfileRepository.findByQuoteStockCode(symbol);
+  // List<ProfileEntity> profileEntity =
+  // stockProfileRepository.findByQuoteStockCode(symbol);
 
-  //   if (profileEntity.size() == 0) {
-  //     throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
-  //   }
+  // if (profileEntity.size() == 0) {
+  // throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+  // }
 
-  //   return profileEntity.get(0);
+  // return profileEntity.get(0);
   // }
 
   // @Override
   // public QuoteEntity getStockQuoteEntitiesFromDB(String symbol)
-  //     throws JsonProcessingException {
+  // throws JsonProcessingException {
 
-  //   List<QuoteEntity> quoteEntity =
-  //       stockQuoteRepository.findByQuoteStockCode(symbol);
+  // List<QuoteEntity> quoteEntity =
+  // stockQuoteRepository.findByQuoteStockCode(symbol);
 
-  //   if (quoteEntity.size() == 0) {
-  //     throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
-  //   }
+  // if (quoteEntity.size() == 0) {
+  // throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+  // }
 
-  //   return quoteEntity.get(0);
+  // return quoteEntity.get(0);
   // }
 
   private Profile2 getProfile(StockId id) {
@@ -395,5 +425,9 @@ public class FinnubServiceImpl implements FinnhubService {
     return apiRespQuote.getData();
 
   }
+
+
+
+
 
 }

@@ -32,7 +32,7 @@ public class Quote {
   // Previous close price
   private double pc;
   
-  // Timestamp
+  // Timestamp in UTC
   private long t;
 
 }

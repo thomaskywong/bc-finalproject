@@ -24,7 +24,10 @@ public interface FinnhubService {
 
     Boolean clearStockEntitiesFromDB() throws JsonProcessingException;
 
+    Boolean storeStockDailyEntityToDB() throws JsonProcessingException;
+
     List<StockEntity> getStockMarketPrices();
+
 
     // ProfileEntity getStockProfileEntitiesFromDB(String symbol)
     //         throws JsonProcessingException;

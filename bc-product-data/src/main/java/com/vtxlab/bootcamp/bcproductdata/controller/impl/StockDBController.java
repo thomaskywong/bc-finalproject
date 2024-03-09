@@ -58,6 +58,11 @@ public class StockDBController implements StockDBOperation{
       return finnhubService.clearStockEntitiesFromDB();
     }
 
+    @Override
+    public Boolean saveStockDailyEntityToDB() throws JsonProcessingException {
+      return finnhubService.storeStockDailyEntityToDB();
+    }
+
     // @Override
     // public ProfileEntity getStockProfileEntitiesFromDB(String symbol)
     //     throws JsonProcessingException {

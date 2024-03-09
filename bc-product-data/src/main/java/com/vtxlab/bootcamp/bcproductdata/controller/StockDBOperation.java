@@ -44,6 +44,10 @@ public interface StockDBOperation {
   @ResponseStatus(value = HttpStatus.OK)
   Boolean clearStockEntitiesFromDB() throws JsonProcessingException;
 
+  @PostMapping(value = "/stock/daily/save")
+  @ResponseStatus(value = HttpStatus.OK)
+  Boolean saveStockDailyEntityToDB() throws JsonProcessingException;
+
   // @GetMapping(value = "/profile/entity")
   // @ResponseStatus(value = HttpStatus.OK)
   // ProfileEntity getStockProfileEntitiesFromDB(@RequestParam String symbol) throws JsonProcessingException;
