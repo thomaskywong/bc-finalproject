@@ -63,6 +63,12 @@ public class StockDBController implements StockDBOperation{
       return finnhubService.storeStockDailyEntityToDB();
     }
 
+    @Override
+    public Boolean reflashSameDayStockDailyEntityInDB()
+        throws JsonProcessingException {
+      return finnhubService.reflashSameDayStockDailyEntityInDB();
+    }
+
     // @Override
     // public ProfileEntity getStockProfileEntitiesFromDB(String symbol)
     //     throws JsonProcessingException {

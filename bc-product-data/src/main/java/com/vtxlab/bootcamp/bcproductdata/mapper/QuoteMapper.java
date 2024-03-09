@@ -15,23 +15,36 @@ public class QuoteMapper {
 
     long timestamp = quote.getT();
     Instant instant = Instant.ofEpochSecond(timestamp);
-    LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
-    
+    LocalDateTime localDateTime =
+        LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+
     return QuoteEntity.builder() //
-      .quoteDate(localDateTime) //
-      .quoteStockCode(stockId.getStockId()) //
-      .currPrice(quote.getC()) //
-      .priceChg(quote.getD()) //
-      .priceChgPct(quote.getDp() )//
-      .priceDayHigh(quote.getH()) //
-      .priceDayLow(quote.getL()) //
-      .pricePrevOpen(quote.getO())//
-      .pricePrevClose(quote.getPc())//
-      .build();                    
+        .quoteDate(localDateTime) //
+        .quoteStockCode(stockId.getStockId()) //
+        .currPrice(quote.getC()) //
+        .priceChg(quote.getD()) //
+        .priceChgPct(quote.getDp())//
+        .priceDayHigh(quote.getH()) //
+        .priceDayLow(quote.getL()) //
+        .pricePrevOpen(quote.getO())//
+        .pricePrevClose(quote.getPc())//
+        .build();
+
+    // QuoteEntity entity = new QuoteEntity(null,//
+    // localDateTime,//
+    // stockId.getStockId(),//
+    // quote.getC(),//
+    // quote.getD(),//
+    // quote.getDp(),//
+    // quote.getH(),//
+    // quote.getL(),//
+    // quote.getO(),//
+    // quote.getPc()
+    // );
+
+    // return entity;
   }
 
 }
-
-
 
 

@@ -24,10 +24,5 @@ public class AppConfig {
   //   return new RedisTemplate<>();
   // }
 
-  // @Bean
-  // ModelMapper modelMapper() {
-  //   return new ModelMapper();
-  // }
-  
   
 }

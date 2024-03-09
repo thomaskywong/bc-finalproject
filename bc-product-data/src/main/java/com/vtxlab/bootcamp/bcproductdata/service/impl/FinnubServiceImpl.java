@@ -1,6 +1,7 @@
 package com.vtxlab.bootcamp.bcproductdata.service.impl;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import com.vtxlab.bootcamp.bcproductdata.model.ApiRespProfile;
 import com.vtxlab.bootcamp.bcproductdata.model.ApiRespQuote;
 import com.vtxlab.bootcamp.bcproductdata.model.StockId;
 import com.vtxlab.bootcamp.bcproductdata.model.StockSymbol;
+import com.vtxlab.bootcamp.bcproductdata.repository.StockDailyRepository;
 import com.vtxlab.bootcamp.bcproductdata.repository.StockIdRepository;
 import com.vtxlab.bootcamp.bcproductdata.repository.StockProfileRepository;
 import com.vtxlab.bootcamp.bcproductdata.repository.StockQuoteRepository;
@@ -78,6 +80,9 @@ public class FinnubServiceImpl implements FinnhubService {
 
   @Autowired
   private StockProfileRepository stockProfileRepository;
+
+  @Autowired
+  private StockDailyRepository stockDailyRepository;
 
   @Autowired
   private StockRepository stockRepository;
@@ -355,6 +360,77 @@ public class FinnubServiceImpl implements FinnhubService {
 
     return true;
   }
+
+  @Override
+  @Transactional
+  public Boolean reflashSameDayStockDailyEntityInDB()
+      throws JsonProcessingException {
+
+    List<StockId> ids = stockIdService.getStockIds();
+
+    for (StockId id : ids) {
+
+      QuoteEntity recentQuoteEntity = stockQuoteRepository
+          .getMostRecentQuoteEntityBySymbol(id.getStockId());
+
+      StockIdEntity stockIdEntity =
+          stockIdRepository.findByStockId(id.getStockId()).get(0);
+
+      LocalDate recentDate = recentQuoteEntity.getQuoteDate().toLocalDate();
+
+      StockDailyEntity oldEntity = stockDailyRepository
+          .getDailyEntityByDateAndSymbol(stockIdEntity, recentDate);
+
+      if (oldEntity != null) {
+
+        Long primaryKey = oldEntity.getId();
+
+        StockDailyEntity entity =
+            entityManager.find(StockDailyEntity.class, primaryKey);
+
+        entity.setDayHigh(recentQuoteEntity.getPriceDayHigh());
+        entity.setDayLow(recentQuoteEntity.getPriceDayLow());
+        entity.setDayOpen(recentQuoteEntity.getPricePrevOpen());
+        entity.setDayClose(recentQuoteEntity.getCurrPrice());
+
+        entityManager.merge(entity);
+
+      } else {
+
+        // get most recent quoteEntity from DB
+        QuoteEntity qEntity = stockQuoteRepository
+            .getMostRecentQuoteEntityBySymbol(id.getStockId());
+
+        // build StockDailyEntity
+        StockDailyEntity sDailyEntity =
+            stockDailyMapper.mapStockDailyEntity(recentQuoteEntity, id);
+
+        // Use EntityManager to find StockIdEntity from DB
+        Long primaryKey = stockIdEntity.getId();
+
+        StockIdEntity sIdEntity =
+            entityManager.find(StockIdEntity.class, primaryKey);
+
+        List<StockDailyEntity> stockDailyEntities =
+            sIdEntity.getStockDailyEntities();
+
+        // add StockDailyEntity to List
+        stockDailyEntities.add(sDailyEntity);
+
+        // Set new list into StockIdEntity
+        sIdEntity.setStockDailyEntities(stockDailyEntities);
+
+        // Use EntityManager to merge into DB
+        entityManager.merge(sIdEntity);
+
+      }
+
+    }
+
+
+    return true;
+  }
+
   // @Override
   // public ProfileEntity getStockProfileEntitiesFromDB(String symbol)
   // throws JsonProcessingException {
@@ -425,8 +501,6 @@ public class FinnubServiceImpl implements FinnhubService {
     return apiRespQuote.getData();
 
   }
-
-
 
 
 
