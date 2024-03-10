@@ -112,12 +112,12 @@
           </td>          
         </tr>
         <tr class="text-left bg-gray-100 text-gray-600 text-sm">
-          <th class="w-1/5 p-4">Coin Name</th>
-          <th class="w-1/5">Market Price(Real Time)</th>
-          <th class="w-1/5">24 Hours % Change</th>
-          <!-- <th class="w-1/6 hidden sm:table-cell">24 Hours High</th>
-          <th class="w-1/6 hidden sm:table-cell">24 Hours Low</th> -->
-          <th class="w-1/5 hidden sm:table-cell">Market Cap</th>
+          <th class="w-1/6 p-4">Coin Name</th>
+          <th class="w-1/6">Market Price(Real Time)</th>
+          <th class="w-1/6">24 Hours % Change</th>
+          <th class="w-1/6 hidden sm:table-cell">24 Hours High</th>
+          <th class="w-1/6 hidden sm:table-cell">24 Hours Low</th>
+          <th class="w-1/6 hidden sm:table-cell">Market Cap</th>
         </tr>
       </thead>
       
@@ -150,12 +150,12 @@
               <fa icon="caret-up" class="mr-1" />{{coin.price_change_percentage_24h}}%
             </div>
           </td>
-          <!-- <td class="hidden sm:table-cell">
+          <td class="hidden sm:table-cell">
             <p style="color:rgb(26, 137, 165)">${{ $filters.comma_separator(coin.high_24h) }} </p>
           </td>
           <td class="pr-10 hidden sm:table-cell">
             <p style="color:rgb(26, 137, 165)">${{ $filters.comma_separator(coin.low_24h) }} </p>
-          </td> -->
+          </td>
           <td class="pr-10 hidden sm:table-cell">
             <p style="color:rgb(26, 137, 165)">${{ $filters.comma_separator(coin.market_cap) }} </p>
           </td>
