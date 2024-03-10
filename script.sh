@@ -20,3 +20,7 @@ start bash -c "mvn spring-boot:run; exec bash" &
 cd ..
 cd bc-coingecko-vue/
 start bash -c "yarn serve" &
+
+cd ..
+cd bc-product-vue/
+start bash -c "yarn serve" &

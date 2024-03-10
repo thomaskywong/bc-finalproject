@@ -71,7 +71,7 @@ public class ScheduledConfig {
     }
   }
 
-  // @Scheduled(fixedRate = 5000)
+  // @Scheduled(fixedRate = 60000)
   @Scheduled(cron = "1 * 21 * * *", zone = "America/New_York")
   void reflashStockDailyEntityDB() throws JsonProcessingException {
     finnhubService.reflashStockDailyEntityInDB();

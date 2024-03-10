@@ -11,7 +11,7 @@ public class ProductMapper {
   
   public Product mapProduct(CoinEntity entity) {
 
-    return new Product(ProductType.CRYPTOCURRENCY.name().toLowerCase(),//
+    return new Product(ProductType.CRYPTO.name(),//
                        entity.getCoinIdEntity().getCoinId(),//
                        entity.getName(),//
                        entity.getCurrPrice(),//
@@ -24,7 +24,7 @@ public class ProductMapper {
 
     Double actualMarketCap = entity.getMarketCap() * 1_000_000;
 
-    return new Product(ProductType.STOCK.name().toLowerCase(),//
+    return new Product(ProductType.STOCK.name(),//
                        entity.getStockIdEntity().getStockId(),//
                        entity.getName(),//
                        entity.getCurrPrice(),//

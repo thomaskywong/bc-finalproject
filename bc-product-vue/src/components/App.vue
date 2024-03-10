@@ -16,12 +16,13 @@
           </td>          
         </tr>
         <tr class="text-left bg-gray-100 text-gray-600 text-sm">
-          <th class="w-1/5 p-4">Product Name</th>
-          <th class="w-1/5">Market Price(Real Time)</th>
-          <th class="w-1/5">24 Hours % Change</th>
+          <th class="w-1/6 p-4">Product Name</th>
+          <th class="w-1/6 p-4">Product Type</th>
+          <th class="w-1/6">Market Price(Real Time)</th>
+          <th class="w-1/6">24 Hours % Change</th>
           <!-- <th class="w-1/6 hidden sm:table-cell">24 Hours High</th>
           <th class="w-1/6 hidden sm:table-cell">24 Hours Low</th> -->
-          <th class="w-1/5 hidden sm:table-cell">Market Capitalization</th>
+          <th class="w-1/6 hidden sm:table-cell">Market Capitalization</th>
         </tr>
       </thead>
       
@@ -42,6 +43,9 @@
             <p class="uppercase text-gray-500 hidden sm:table-cell">
               {{product.productId}}
             </p>
+          </td>
+          <td class=" font-bold">
+            <p class="mr-2">{{product.productType}}</p>
           </td>
           <td class="font-bold text-gray-600">
             ${{ $filters.comma_separator(product.currentPrice) }}
