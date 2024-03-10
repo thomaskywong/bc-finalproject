@@ -51,7 +51,7 @@
             ${{ $filters.comma_separator(product.currentPrice) }}
           </td>
           <td class=" font-bold">
-            <div class="text-red-500" v-if="$filters.price_negative(product.priceChangPct)">
+            <div class="text-red-500" v-if="$filters.price_negative(product.priceChangePct)">
               <fa icon="caret-down" class="mr-1" />{{product.priceChangePct}}%
             </div>
             <div v-else class="text-green-500" >
