@@ -25,8 +25,6 @@ public interface FinnhubService {
     Boolean clearStockEntitiesFromDB() throws JsonProcessingException;
 
     
-    Boolean storeStockDailyEntityToDB() throws JsonProcessingException;
-
     Boolean reflashStockDailyEntityInDB() throws JsonProcessingException; 
 
     

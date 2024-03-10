@@ -9,10 +9,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Setter
 @EqualsAndHashCode
 public class StockDailyDTO implements Serializable {
@@ -45,4 +47,5 @@ public class StockDailyDTO implements Serializable {
         entity.getDayClose() //
     );
   }
+
 }

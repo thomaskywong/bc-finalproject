@@ -86,6 +86,13 @@ public class StockIdServiceImpl implements StockIdService {
         .collect(Collectors.toList());
   }
 
+  // @Override
+  public List<StockIdEntity> getStockIdEntities() throws JsonProcessingException {
+    return stockIdRepository.findAll() //
+        .stream() //
+        .collect(Collectors.toList());
+  }
+
   @Override
   public Boolean deleteStockId(List<StockId> ids)
       throws JsonProcessingException {

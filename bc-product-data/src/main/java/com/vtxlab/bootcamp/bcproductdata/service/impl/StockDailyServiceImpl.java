@@ -53,7 +53,7 @@ public class StockDailyServiceImpl implements StockDailyService {
     StockDailyEntity todayEntity =
         stockDailyMapper.mapStockDailyEntity(qEntity, id);
 
-    System.out.println("Today Entity = " + todayEntity);
+    // System.out.println("Today Entity = " + todayEntity);
 
 
     StockIdEntity stockIdEntity =
@@ -79,35 +79,42 @@ public class StockDailyServiceImpl implements StockDailyService {
   @Transactional
   public void saveDataToRedis() throws JsonProcessingException {
 
+    // Get valid stock IDs
     List<StockIdEntity> idEntities = stockIdRepository.findAll();
 
+    // convert from entity to id
     List<StockId> ids = idEntities.stream()//
         .map(e -> stockIdMapper.mapSymbolId(e))//
         .collect(Collectors.toList());
 
     for (StockId id : ids) {
 
+      // generate key of redis
       String keyString = new StringBuilder("stock:daily:")//
           .append(id.getStockId())//
           .toString();
 
-      // System.out.println("key = " + keyString);
-
+      // Get Primary Key Object from repository
       StockIdEntity stockIdEntity =
           stockIdRepository.findByStockId(id.getStockId());
 
+      // get a list of daily record from primary key object 
       List<StockDailyEntity> stockDailyEntities =
           stockIdEntity.getStockDailyEntities();
 
+      // sort daily record in decending order of date
       List<StockDailyDTO> stockDailyDTOs = stockDailyEntities.stream()//
           .map(StockDailyDTO::mapToStockDailyDTO)//
           .sorted(Comparator.comparing(StockDailyDTO::getTradeDate).reversed())
           .collect(Collectors.toList());
+          
+    //   System.out.println("List of DTO = " + stockDailyDTOs);
 
+      // generate value of redis
       String value = objectMapper.writeValueAsString(stockDailyDTOs);
 
-      // System.out.println("value = " + value);
-
+    //   System.out.println("key = " + keyString + ", value = " + value);
+      // save to redis
       redisService.setValue(keyString, value);
 
     }

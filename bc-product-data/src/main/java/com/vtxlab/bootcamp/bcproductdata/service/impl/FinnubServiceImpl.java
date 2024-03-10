@@ -265,20 +265,12 @@ public class FinnubServiceImpl implements FinnhubService {
 
       }
 
-      // List<StockIdEntity> stockIdEntities =
-      // stockIdRepository.findByStockId(id.getStockId());
-
-
-      // StockIdEntity stockIdEntity = stockIdEntities.get(0);
-
       StockIdEntity stockIdEntity =
           stockIdRepository.findByStockId(id.getStockId());
 
       if (stockIdEntity == null) {
         throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
       }
-
-      // System.out.println(stockIdEntity);
 
       stockIdEntity.setStockEntity(stockEntity);
 
@@ -298,10 +290,6 @@ public class FinnubServiceImpl implements FinnhubService {
     List<StockId> stockIds = stockIdService.getStockIds();
 
     for (StockId id : stockIds) {
-
-      // List<StockIdEntity> stockIdEntities =
-      // stockIdRepository.findByStockId(id.getStockId());
-      // StockIdEntity stockIdEntity = stockIdEntities.get(0);
 
       StockIdEntity stockIdEntity =
           stockIdRepository.findByStockId(id.getStockId());
@@ -326,54 +314,6 @@ public class FinnubServiceImpl implements FinnhubService {
     return stockRepository.findAll();
   }
 
-  @Override
-  @Transactional
-  public Boolean storeStockDailyEntityToDB() throws JsonProcessingException {
-
-    // update quote in DB (call bc-stock-finnhub API)
-    this.saveQuotesToDB();
-
-    // get list of symbols
-    List<StockId> ids = stockIdService.getStockIds();
-
-    for (StockId id : ids) {
-
-      // get quote from repository
-      QuoteEntity qEntity = stockQuoteRepository
-          .getMostRecentQuoteEntityBySymbol(id.getStockId());
-
-      // convert quote entity to stock daily entity
-      StockDailyEntity sDailyEntity =
-          stockDailyMapper.mapStockDailyEntity(qEntity, id);
-
-      // System.out.println(sDailyEntity);
-      // Long primaryKey =
-      // stockIdRepository.findByStockId(id.getStockId()).get(0).getId();
-
-      Long primaryKey =
-          stockIdRepository.findByStockId(id.getStockId()).getId();
-
-      // Store stock daily entity to repository
-      StockIdEntity sIdEntity =
-          entityManager.find(StockIdEntity.class, primaryKey);
-
-      // System.out.println("StockIdEntities = " + sIdEntities);
-
-      if (sIdEntity == null) {
-        throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
-      }
-
-      List<StockDailyEntity> stockDailyEntities =
-          sIdEntity.getStockDailyEntities();
-      stockDailyEntities.add(sDailyEntity);
-      sIdEntity.setStockDailyEntities(stockDailyEntities);
-
-      entityManager.merge(sIdEntity);
-
-    }
-
-    return true;
-  }
 
   @Override
   @Transactional
@@ -385,19 +325,21 @@ public class FinnubServiceImpl implements FinnhubService {
 
     for (StockId id : ids) {
 
+      // get most recent quote entity
       QuoteEntity recentQuoteEntity = stockQuoteRepository
           .getMostRecentQuoteEntityBySymbol(id.getStockId());
 
-      // StockIdEntity stockIdEntity =
-      // stockIdRepository.findByStockId(id.getStockId()).get(0);
-
+      // get StockIdEntity Object from repository
       StockIdEntity stockIdEntity =
           stockIdRepository.findByStockId(id.getStockId());
 
+      // get recent quote date
       LocalDate recentDate = recentQuoteEntity.getQuoteDate().toLocalDate();
 
+      // get
       StockDailyEntity oldEntity = stockDailyRepository
           .getDailyEntityByDateAndSymbol(stockIdEntity, recentDate);
+      
 
       if (oldEntity != null) {
 

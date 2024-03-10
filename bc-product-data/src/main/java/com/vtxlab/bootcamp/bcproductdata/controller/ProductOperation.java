@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vtxlab.bootcamp.bcproductdata.dto.Product;
 import com.vtxlab.bootcamp.bcproductdata.dto.StockDailyDTO;
-import com.vtxlab.bootcamp.bcproductdata.entity.StockDailyEntity;
 import com.vtxlab.bootcamp.bcproductdata.infra.ApiResponse;
 
 public interface ProductOperation {
