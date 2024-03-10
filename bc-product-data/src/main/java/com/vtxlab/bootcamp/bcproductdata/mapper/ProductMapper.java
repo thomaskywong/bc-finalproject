@@ -10,6 +10,7 @@ import com.vtxlab.bootcamp.bcproductdata.model.ProductType;
 public class ProductMapper {
   
   public Product mapProduct(CoinEntity entity) {
+
     return new Product(ProductType.CRYPTOCURRENCY.name().toLowerCase(),//
                        entity.getCoinIdEntity().getCoinId(),//
                        entity.getName(),//
@@ -20,12 +21,15 @@ public class ProductMapper {
   }
 
   public Product mapProduct(StockEntity entity) {
+
+    Double actualMarketCap = entity.getMarketCap() * 1_000_000;
+
     return new Product(ProductType.STOCK.name().toLowerCase(),//
                        entity.getStockIdEntity().getStockId(),//
                        entity.getName(),//
                        entity.getCurrPrice(),//
                        entity.getPriceChangePercent(),//
-                       entity.getMarketCap(),//
+                       actualMarketCap,//
                        entity.getLogo());
   }
 
