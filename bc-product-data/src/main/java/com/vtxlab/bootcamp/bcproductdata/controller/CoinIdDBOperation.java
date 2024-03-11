@@ -21,9 +21,9 @@ public interface CoinIdDBOperation {
   // @ResponseStatus(value = HttpStatus.OK)
   // List<CoinId> getCoinIds() throws JsonProcessingException;
 
-  // @DeleteMapping(value = "/coin_ids/delete")
-  // @ResponseStatus(value = HttpStatus.OK)
-  // Boolean deleteCoinId(@RequestParam (name = "coins") List<CoinId> coins) throws JsonProcessingException;
+  @DeleteMapping(value = "/coin_ids/delete")
+  @ResponseStatus(value = HttpStatus.OK)
+  Boolean deleteCoinId(@RequestParam (name = "coins") List<CoinId> coins) throws JsonProcessingException;
 
   @DeleteMapping(value = "/coin_ids/delete_all")
   @ResponseStatus(value = HttpStatus.OK)

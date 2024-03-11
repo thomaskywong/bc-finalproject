@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vtxlab.bootcamp.bcproductdata.controller.CoinIdDBOperation;
-import com.vtxlab.bootcamp.bcproductdata.dto.Coin;
+// import com.vtxlab.bootcamp.bcproductdata.dto.Coin;
 import com.vtxlab.bootcamp.bcproductdata.model.CoinId;
 import com.vtxlab.bootcamp.bcproductdata.service.CoinIdService;
 
@@ -32,11 +32,11 @@ public class CoinIdDBController implements CoinIdDBOperation {
   //   return coinIdService.getCoins();
   // }
 
-  // @Override
-  // public Boolean deleteCoinId(List<CoinId> coins) throws JsonProcessingException {
+  @Override
+  public Boolean deleteCoinId(List<CoinId> coins) throws JsonProcessingException {
     
-  //   return coinIdService.deleteCoinId(coins);
-  // }
+    return coinIdService.deleteCoinId(coins);
+  }
 
   @Override
   public Boolean deleteAllCoinId() throws JsonProcessingException {

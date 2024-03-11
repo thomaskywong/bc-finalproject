@@ -17,7 +17,7 @@
         </tr>
         <tr class="text-left bg-gray-100 text-gray-600 text-sm">
           <th class="w-1/6 p-4">Product Name</th>
-          <th class="w-1/6 p-4">Product Type</th>
+          <th class="w-1/6">Product Type</th>
           <th class="w-1/6">Market Price(Real Time)</th>
           <th class="w-1/6">24 Hours % Change</th>
           <!-- <th class="w-1/6 hidden sm:table-cell">24 Hours High</th>
@@ -33,12 +33,11 @@
          v-for="product in matchedNames" :key="product.name"
         >
           <td class="p-4 flex items-center">
-            <!-- <p class="mr-2">{{product.productType}}</p> -->
-            <img
+            <!-- <img
               :src="product.logo"
               alt="product logo"
               class="w-7 h-7 rounded-full mr-1"
-            />
+            /> -->
             <p class="font-bold p-1 mr-1">{{product.name}}</p>
             <p class="uppercase text-gray-500 hidden sm:table-cell">
               {{product.productId}}
@@ -92,8 +91,6 @@ export default {
         );
         products.value = response.data.data; // ApiResponse's data object reponse.data
         console.log(products.value);
-        // products.datavalue = response.data.data;
-        // console.log(products.datavalue);
       } catch (err) {
         console.log(err);
       }
@@ -101,7 +98,7 @@ export default {
     // fetch timer, invoke backend service in every 10 seconds 
     setInterval(() => {
       retrieveProducts();
-    }, 10000);
+    }, 2000);
     // search and sort
     const matchedNames = computed(() => {
       const lowercaseSearch = search.value.toLowerCase(); // Convert search value to lowercase
