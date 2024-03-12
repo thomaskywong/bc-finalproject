@@ -1,26 +1,25 @@
 #!/bin/bash
 
 # Change to the first application directory
-cd bc-crypto-coingecko/
+cd /github/bc-finalproject/bc-crypto-coingecko/
 
 # Run the first Spring Boot application in a separate terminal
 start bash -c "mvn spring-boot:run; exec bash" &
 
 # Change to the second application directory
-cd ..
-cd bc-stock-finnhub/
+cd /github/bc-finalproject/bc-stock-finnhub/
 
 # Run the second Spring Boot application in a separate terminal
 start bash -c "mvn spring-boot:run; exec bash" &
 
-cd ..
-cd bc-product-data/
-start bash -c "mvn spring-boot:run; exec bash" &
-
-cd ..
-cd bc-coingecko-vue/
+# Run vue crypto
+cd /github/bc-finalproject/bc-coingecko-vue/
 start bash -c "yarn serve" &
 
-cd ..
-cd bc-product-vue/
+# Run vue crypto and stock
+cd /github/bc-finalproject/bc-product-vue/
 start bash -c "yarn serve" &
+
+# Run project 4
+cd /github/bc-finalproject/bc-product-data/
+mvn spring-boot:run
