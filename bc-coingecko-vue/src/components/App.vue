@@ -100,7 +100,7 @@
     
     <!-- table -->
     <table class="table-fixed cursor-pointer" >
-      <caption class="table-title font-bold text-gray-700  pb-2">Cryptocurrency Exchange (USD) (Top 10 Market Cap)</caption>
+      <caption class="table-title font-bold text-gray-700  pb-2">Cryptocurrency Exchange (USD) (Top 100 Market Cap)</caption>
       <!-- head -->
       <thead>
         <tr class="relative text-left text-gray-600 text-sm" >
@@ -180,7 +180,7 @@ export default {
     const retrieveCoins = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8090/crypto/coingecko/api/v1/coins/markets2?currency=usd"
+          "http://localhost:8090/crypto/coingecko/api/v1/coins/markets?currency=usd"
         );
         coins.value = response.data.data; // ApiResponse's data object reponse.data
         console.log(coins.value);

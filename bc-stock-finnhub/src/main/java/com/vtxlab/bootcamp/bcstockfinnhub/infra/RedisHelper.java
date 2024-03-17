@@ -28,13 +28,16 @@ public class RedisHelper {
 
   public RedisHelper(RedisConnectionFactory factory,
       ObjectMapper objectMapper) {
+
     Objects.requireNonNull(objectMapper);
+    
     RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
     redisTemplate.setConnectionFactory(factory);
     redisTemplate.setKeySerializer(RedisSerializer.string());
     redisTemplate.setValueSerializer(RedisSerializer.json());
     // redisTemplate.setHashKeySerializer(null);
     redisTemplate.afterPropertiesSet();
+    
     this.redisTemplate = redisTemplate;
     this.objectMapper = objectMapper;
   }

@@ -95,7 +95,7 @@ export default {
         console.log(err);
       }
     };
-    // fetch timer, invoke backend service in every 10 seconds 
+    // fetch timer, invoke backend service in every 2 seconds 
     setInterval(() => {
       retrieveProducts();
     }, 2000);

@@ -19,7 +19,7 @@ public interface CryptoDBOperation {
   // @ResponseStatus(value = HttpStatus.OK)
   // Boolean clearCoinsFromDB() throws JsonProcessingException;
 
-  
+
   // @PostMapping(value = "/coins/entites/save")
   // @ResponseStatus(value = HttpStatus.OK)
   // Boolean storeCoinEntitiesToDB() throws JsonProcessingException;
